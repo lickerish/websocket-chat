@@ -5,9 +5,10 @@ function connect() {
     var socket = new SockJS(socketPath);
     stomp = Stomp.over(socket);
     stomp.connect({}, function (frame) {
+        resetProperties(true);
         console.log('Connected: ' + frame);
         stomp.subscribe('/topic/invitation', function (message) {
-            message(message);
+            messageCreate(message);
         });
         stomp.send("/app/hello", {}, JSON.stringify({
             'name': 'Chat System',
@@ -15,7 +16,7 @@ function connect() {
         }));
     })
 }
-function message(message) {
+function messageCreate(message) {
     messageContent = JSON.parse(message.body).content;
     messageName = JSON.parse(message.body).name;
     messageTime = JSON.parse(message.body).time;
@@ -31,6 +32,7 @@ function disconnect() {
     if (stomp) {
         stomp.disconnect();
     }
+    resetProperties(false);
     console.log('Disconnected');
 }
 
@@ -44,6 +46,7 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
+    resetProperties(false);
     $("#connect").click(function () {
         connect();
     });
@@ -56,3 +59,18 @@ $(function () {
         sendMessage()
     });
 });
+
+function resetProperties(connected) {
+    $("#connect").prop("disabled", connected);
+    $("#disconnect").prop("disabled", !connected);
+    if (connected) {
+        $("#text-input").show();
+        $("#sendMessage").show();
+        console.log("Text input: SHOW")
+    } else {
+        $("#sendMessage").hide();
+        $("#text-input").hide();
+        console.log("Text input: HIDE")
+    }
+}
+
