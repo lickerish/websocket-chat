@@ -2,20 +2,27 @@ var socketPath = '/chat';
 var stomp = null;
 
 function connect() {
-    var socket = new SockJS(socketPath);
-    stomp = Stomp.over(socket);
-    stomp.connect({}, function (frame) {
-        resetProperties(true);
-        console.log('Connected: ' + frame);
-        stomp.subscribe('/topic/invitation', function (message) {
-            messageCreate(message);
-        });
-        stomp.send("/app/hello", {}, JSON.stringify({
-            'name': 'Chat System',
-            'content': 'username joined to the chat'
-        }));
-    })
+    var username = document.querySelector('#name').value.trim();
+    if (username) {
+        $('#username-page').addClass('hidden');
+        $('#chat-page').removeClass('hidden');
+
+        var socket = new SockJS(socketPath);
+        stomp = Stomp.over(socket);
+        stomp.connect({}, function (frame) {
+            resetProperties(true);
+            console.log('Connected: ' + frame);
+            stomp.subscribe('/topic/invitation', function (message) {
+                messageCreate(message);
+            });
+            stomp.send("/app/hello", {}, JSON.stringify({
+                'name': 'Chat System',
+                'content': username + ' joined to the chat'
+            }));
+        })
+    }
 }
+
 function messageCreate(message) {
     messageContent = JSON.parse(message.body).content;
     messageName = JSON.parse(message.body).name;
@@ -38,7 +45,8 @@ function disconnect() {
 
 function sendMessage() {
     var messageContent = $('#text-input').val().trim();
-    stomp.send("/app/hello", {}, JSON.stringify({'content': messageContent, 'name': 'username'}));
+    var username = $('#name').val().trim();
+    stomp.send("/app/hello", {}, JSON.stringify({'content': messageContent, 'name': username}));
     $('#text-input').val('');
 }
 
@@ -47,6 +55,9 @@ $(function () {
         e.preventDefault();
     });
     resetProperties(false);
+    $("#start-chat").click(function () {
+        connect();
+    });
     $("#connect").click(function () {
         connect();
     });
