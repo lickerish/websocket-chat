@@ -26,3 +26,33 @@ function message(message) {
         "<td>" + messageTime + "</td>" +
         "</tr>");
 }
+
+function disconnect() {
+    if (stomp) {
+        stomp.disconnect();
+    }
+    console.log('Disconnected');
+}
+
+function sendMessage() {
+    var messageContent = $('#text-input').val().trim();
+    stomp.send("/app/hello", {}, JSON.stringify({'content': messageContent, 'name': 'username'}));
+    $('#text-input').val('');
+}
+
+$(function () {
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
+    $("#connect").click(function () {
+        connect();
+    });
+
+    $("#disconnect").click(function () {
+        disconnect();
+    });
+
+    $("#sendMessage").click(function () {
+        sendMessage()
+    });
+});
