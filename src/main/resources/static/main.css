@@ -49,3 +49,28 @@ tbody {
     overflow-y: scroll;
     height: 779px;
 }
+
+#username-page {
+    text-align: center;
+}
+
+.username-page-container {
+    background: #c1c6dc;
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.30);
+    border-radius: 2px;
+    width: 100%;
+    max-width: 500px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 35px 55px 35px;
+    min-height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: -160px auto 0;
+}
+
+.hidden {
+    display: none;
+}
