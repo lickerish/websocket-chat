@@ -10,7 +10,7 @@ import pl.lickerish.websocketchat.models.Message;
 public class MessageController {
 
     @MessageMapping("/hello")
-    @SendTo("topic/invitation")
+    @SendTo("/topic/invitation")
     public Message message(@Payload Message message) {
         return message;
     }
