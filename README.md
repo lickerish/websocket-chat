@@ -33,9 +33,9 @@ mvn spring-boot:run
 
 ### URLs
 
-|  URL |  Method | Remarks |
-|----------|--------------|--------------|
-|`http://localhost:8080/chat`                       | GET | |
+|  URL |  Method |
+|----------|--------------|
+|`http://localhost:8080/chat`                       | GET |
 
 
 ## packages
